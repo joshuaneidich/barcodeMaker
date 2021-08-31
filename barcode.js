@@ -7,13 +7,16 @@
         console.dir(fileContent);
         loopOverFileContents(fileContent)
     })
+    JsBarcode(".title", "Barcode Maker");
 })()
 
 
 
 
 function loopOverFileContents(fileContents) {
-    let barcodeTextArray = fileContents.split(",");
+    // split separator out into its own variable so we can later change options in the interface
+    let separator = '|'
+    let barcodeTextArray = fileContents.split(separator);
     console.dir(barcodeTextArray);
     for (let i = 0; i < barcodeTextArray.length; i++) {
         let textToWrite = barcodeTextArray[i].trim();
