@@ -7,4 +7,11 @@ canvas {
     margin: 0 auto;
 }
 
-/* todo: add print only css to hide buttons and such */
+@media print {
+
+    /* styles here https://www.sitepoint.com/css-printer-friendly-pages/ */
+    .page-title,
+    input {
+        display: none;
+    }
+}

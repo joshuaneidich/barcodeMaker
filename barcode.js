@@ -15,6 +15,7 @@
 
 function loopOverFileContents(fileContents) {
     // split separator out into its own variable so we can later change options in the interface
+    console.log(fileContents.split('\n')) //test to add an outer loop for creating a separator page for printing purposes.
     let separator = '|'
     let barcodeTextArray = fileContents.split(separator);
     console.dir(barcodeTextArray);
@@ -35,6 +36,11 @@ function loopOverFileContents(fileContents) {
             displayValue: true
         });
     }
+}
+
+// add an element and reference  https://www.sitepoint.com/css-printer-friendly-pages/
+function createSeparatePageEl() {
+
 }
 
 
