@@ -14,4 +14,8 @@ canvas {
     input {
         display: none;
     }
+
+    .page {
+        break-after: page;
+    }
 }

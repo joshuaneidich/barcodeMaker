@@ -14,35 +14,40 @@
 
 
 function loopOverFileContents(fileContents) {
+
     // split separator out into its own variable so we can later change options in the interface
-    console.log(fileContents.split('\n')) //test to add an outer loop for creating a separator page for printing purposes.
+    let barcodeRow = fileContents.split('\n');
     let separator = '|'
-    let barcodeTextArray = fileContents.split(separator);
-    console.dir(barcodeTextArray);
-    for (let i = 0; i < barcodeTextArray.length; i++) {
-        let textToWrite = barcodeTextArray[i].trim();
-        console.dir(textToWrite);
-        console.log(textToWrite.length);
-        let canvasId = `canvas${i}`;
-        //create the canvas object
-        let canvasEl = createBarcodeCanvasElement(canvasId);
-        //append the canvas object
-        appendBarcodeElement(canvasEl, "barcodeContainer");
-        JsBarcode(`#${canvasId}`, textToWrite, {
-            format: "CODE128",
-            // lineColor: "#0aa",
-            // width: 4,
-            // height: 40,
-            displayValue: true
-        });
+    for (let i = 0; i < barcodeRow.length; i++) {
+        console.log(barcodeRow[i])
+        let barcodeTextArray = barcodeRow[i].split(separator);
+        let page = document.createElement("div");
+        let pageId = `page-${i}`;
+        page.setAttribute("id", pageId);
+        page.classList.add("page");
+        console.log(page)
+        appendElement(page, "barcodeContainer");
+        for (let j = 0; j < barcodeTextArray.length; j++) {
+            let textToWrite = barcodeTextArray[j].trim();
+            let canvasId = `canvas${j}`;
+            //create the canvas object
+            let canvasEl = createBarcodeCanvasElement(canvasId);
+            //append the canvas object
+            appendElement(canvasEl, pageId);
+            JsBarcode(`#${canvasId}`, textToWrite, {
+                format: "CODE128",
+                // lineColor: "#0aa",
+                // width: 4,
+                // height: 40,
+                displayValue: true
+            });
+        }
+
     }
-}
-
-// add an element and reference  https://www.sitepoint.com/css-printer-friendly-pages/
-function createSeparatePageEl() {
 
 }
 
+//  reference  https://www.sitepoint.com/css-printer-friendly-pages/
 
 function createBarcodeCanvasElement(canvasId) {
     let canvasEl = document.createElement("canvas");
@@ -50,7 +55,7 @@ function createBarcodeCanvasElement(canvasId) {
     return canvasEl;
 }
 
-function appendBarcodeElement(elToAppend, parentEl) {
+function appendElement(elToAppend, parentEl) {
     let appendLocation = document.getElementById(parentEl);
     appendLocation.appendChild(elToAppend);
     return
