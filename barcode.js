@@ -38,7 +38,7 @@ function loopOverFileContents(fileContents) {
                 format: "CODE128",
                 // lineColor: "#0aa",
                 // width: 4,
-                // height: 40,
+                height: 40,
                 displayValue: true
             });
         }
