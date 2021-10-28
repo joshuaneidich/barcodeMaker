@@ -239,15 +239,17 @@ const BARCODE = (() => {
     //pass the string to make a barcode
     //call renderBarcodeLetter per letter in the string
     function renderBarcode(dataToRender, elementToRender) {
-
+        let offScreenCanvas = document.createElement("canvas");
+        offScreenCanvas.width = elementToRender.width;
+        offScreenCanvas.height = elementToRender.height;
         //keep track of current position
         let currentPosition = 0;
         //need to keep track of a running sum
         let sum = 0;
-        currentPosition = renderBarcodeLetter(0, 'Start Code B', elementToRender);
+        currentPosition = renderBarcodeLetter(0, 'Start Code B', offScreenCanvas);
         sum += CODE128.common['Start Code B'];
         Array.from(dataToRender).forEach((letter, idx) => {
-            currentPosition = renderBarcodeLetter(currentPosition, letter, elementToRender);
+            currentPosition = renderBarcodeLetter(currentPosition, letter, offScreenCanvas);
             let value = (CODE128.B[letter] * (idx + 1))
             //add 1 to index since barcode position is not 0 based
             sum += value
@@ -255,9 +257,10 @@ const BARCODE = (() => {
         })
 
         let checksum = sum % 103;
-        currentPosition = renderBarcodeLetter(currentPosition, checksum, elementToRender)
+        currentPosition = renderBarcodeLetter(currentPosition, checksum, offScreenCanvas)
 
-        currentPosition = renderBarcodeLetter(currentPosition, 'Stop', elementToRender, true)
+        currentPosition = renderBarcodeLetter(currentPosition, 'Stop', offScreenCanvas, true)
+        elementToRender.getContext('2d').drawImage(offScreenCanvas, 0, 0);
     }
 
 
@@ -296,13 +299,6 @@ const BARCODE = (() => {
 })();
 
 
-document.getElementById("text").addEventListener("change", (e) => {
-    if (globalThis.debounce) {
-        clearTimeout(globalThis.debounce);
-    }
-    globalThis.debounce = setTimeout(() => {
-        console.log("user should have stopped typing")
-        BARCODE(e.target.value, document.getElementById("canvas"))
-
-    }, 300)
+document.getElementById("submit").addEventListener("click", (e) => {
+    BARCODE(document.getElementById("text").value, document.getElementById("canvas"));
 })
