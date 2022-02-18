@@ -239,6 +239,13 @@ const BARCODE = (() => {
     //pass the string to make a barcode
     //call renderBarcodeLetter per letter in the string
     function renderBarcode(dataToRender, elementToRender) {
+        //keep a reference to the context
+        let elementToRenderContext = elementToRender.getContext("2d");
+        //get width and height of the element to clear the rectangle in case someone wants to run a new barcode
+        let width = elementToRender.width;
+        let height = elementToRender.height;
+        //clear the canvas
+        elementToRenderContext.clearRect(0, 0, width, height);
         let offScreenCanvas = document.createElement("canvas");
         offScreenCanvas.width = elementToRender.width;
         offScreenCanvas.height = elementToRender.height;
@@ -257,15 +264,18 @@ const BARCODE = (() => {
         })
 
         let checksum = sum % 103;
+        console.log({
+            checksum: checksum
+        })
         currentPosition = renderBarcodeLetter(currentPosition, checksum, offScreenCanvas)
 
         currentPosition = renderBarcodeLetter(currentPosition, 'Stop', offScreenCanvas, true)
-        elementToRender.getContext('2d').drawImage(offScreenCanvas, 0, 0);
+        elementToRenderContext.drawImage(offScreenCanvas, 0, 0);
     }
 
 
     //Draws a barcode per letter and
-    function renderBarcodeLetter(currentPosition, letter, elementToRender, end) {
+    function renderBarcodeLetter(currentPosition, letter, offscrenElementToRender, end) {
         //look up symbology and call the render rectangle 
         //use this var to track current coordinate based on the pattern
         let position = currentPosition;
@@ -275,6 +285,7 @@ const BARCODE = (() => {
             pattern = CODE128.pattern[letterValue];
         }
         if (typeof letter === "number") {
+            console.log("number")
             pattern = CODE128.pattern[letter]
         }
 
@@ -282,12 +293,12 @@ const BARCODE = (() => {
             let fillStyle = (idx + 1) % 2 === 0 ? 'white' : 'black';
             //todo: make the settings configurable, including the width and height
             let width = parseInt(number) * 2;
-            renderRectangle(position, 0, width, 50, fillStyle, elementToRender)
+            renderRectangle(position, 0, width, 50, fillStyle, offscrenElementToRender)
             position += width;
         })
 
         if (end) {
-            renderRectangle(position, 0, 2, 50, "black", elementToRender)
+            renderRectangle(position, 0, 2, 50, "black", offscrenElementToRender)
         }
         return position
     }
@@ -298,7 +309,4 @@ const BARCODE = (() => {
     return renderBarcode
 })();
 
-
-document.getElementById("submit").addEventListener("click", (e) => {
-    BARCODE(document.getElementById("text").value, document.getElementById("canvas"));
-})
+export default BARCODE;

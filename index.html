@@ -1,22 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="./barcodeLibrary.js"></script>
-    <link rel="stylesheet" href="barcode.css">
-    <title>Barcode Maker</title>
+    <!-- <script src="./my_barcode_library.js"></script> -->
+    <script src="./index.js" type="module"></script>
+    <link rel="stylesheet" href="./style.css">
+    <meta charset="utf-8" />
 </head>
 
 <body>
-    <h1 class="page-title"><canvas class="title"></canvas></h1>
-    <input type="file" name="file" id="file">
-    <div id="barcodeContainer">
-
-    </div>
-    <script src="./barcode.js"></script>
+    <input type="text" id="text">
+    <button id="submit">Generate Barcode</button>
+    <canvas id="canvas" width="800" height="300"></canvas>
+    <!-- <script src="./index.js"></script> -->
 </body>
 
 </html>
